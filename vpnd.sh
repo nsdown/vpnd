@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set +e
+
 IFACE="ppp1"
 PPP_CONF="/proc/sys/net/ipv4/conf/ppp1"
 PPP_NEIGH="/proc/sys/net/ipv4/neigh/ppp1"
