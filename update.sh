@@ -2,7 +2,6 @@
 
 RTBL="/jffs/my.rtbl"
 DNSMASQ="/jffs/dnsmasq.conf"
-DNSMASQ_D="/etc/dnsmasq"
 TEMP="/tmp/mujj"
 
 rm -rf $TEMP
@@ -22,8 +21,6 @@ logger "Updating domain name list..."
 wget -O $TEMP/dnsmasq.gz http://dl.mujj.us/etc/dnsmasq.gz
 if [ "$?" = "0" ]; then
   zcat $TEMP/dnsmasq.gz > $DNSMASQ
-  rm -f $DNSMASQ_D/gfw.conf
-  ln -s $DNSMASQ $DNSMASQ_D/gfw.conf
   kill -HUP `pidof dnsmasq`
   logger "Domain list has been updated to latest version."
 else
