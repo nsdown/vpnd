@@ -28,7 +28,7 @@ rtup() {
       BATCH+="rule add to $PREFIX lookup $TABLE_ID pref $PREF"$'\n'
     fi
   done
-  MSG=`echo $BATCH | ip -batch -`
+  MSG=`echo $BATCH | ip -batch - 2>&1`
   if [ "$?" != "0" ]; then
     logger "An error occurred while adding rules: $MSG"
   fi
@@ -41,7 +41,7 @@ rtdown() {
   do
     BATCH+="rule del to $PREFIX table $TABLE_ID"$'\n'
   done
-  MSG=`echo $BATCH | ip -batch -`
+  MSG=`echo $BATCH | ip -batch - 2>&1`
   if [ "$?" != "0" ]; then
     logger "An error occurred while deleting rules: $MSG"
   fi
