@@ -2,7 +2,7 @@
 
 RTBL="/jffs/my.rtbl"
 DNSMASQ="/jffs/dnsmasq.conf"
-TEMP="/tmp/mujj"
+TEMP="/tmp/vpnd"
 
 rm -rf $TEMP
 mkdir -p $TEMP
