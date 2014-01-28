@@ -1,0 +1,26 @@
+plugin "/usr/lib/pppd/pptp.so"
+pptp_server <server_address>
+name <username>
+password <password>
+noipdefault
+nodefaultroute
+noauth
+nodetach
+nobsdcomp
+nodeflate
+novj
+novjccomp
+refuse-eap
+persist
+maxfail 999999
+lcp-echo-failure 5
+lcp-echo-interval 30
+idle 0
+ip-up-script /jffs/pptp-ip-up
+ip-down-script /jffs/pptp-ip-down
+mtu 1400
+mru 1400
++mppe
++mppe-128
+nomppe-stateful
+mppc
