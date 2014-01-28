@@ -25,10 +25,10 @@ rtup() {
   for PREFIX in $RTBL
   do
     if [ "${PREFIX:0:1}" != "#" ]; then
-      BATCH+="rule add to $PREFIX lookup $TABLE_ID pref $PREF"$'\n'
+      BATCH="$BATCH""rule add to $PREFIX lookup $TABLE_ID pref $PREF\n"
     fi
   done
-  MSG=`echo $BATCH | ip -batch - 2>&1`
+  MSG=`echo -e $BATCH | ip -batch - 2>&1`
   if [ "$?" != "0" ]; then
     logger "An error occurred while adding rules: $MSG"
   fi
@@ -39,9 +39,9 @@ rtdown() {
   BATCH=""
   for PREFIX in $RULE_LIST
   do
-    BATCH+="rule del to $PREFIX table $TABLE_ID"$'\n'
+    BATCH="$BATCH""rule del to $PREFIX table $TABLE_ID\n"
   done
-  MSG=`echo $BATCH | ip -batch - 2>&1`
+  MSG=`echo -e $BATCH | ip -batch - 2>&1`
   if [ "$?" != "0" ]; then
     logger "An error occurred while deleting rules: $MSG"
   fi
