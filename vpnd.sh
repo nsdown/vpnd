@@ -21,26 +21,30 @@ rtup() {
   fi
 
   RTBL=`cat $RTFILE | tr '\r\n' ' ' | tr '\n' ' ' | sed 's/ $//g'`
+  BATCH=""
   for PREFIX in $RTBL
   do
     if [ "${PREFIX:0:1}" != "#" ]; then
-      ip rule add to $PREFIX lookup $TABLE_ID pref $PREF
-      if [ "$?" != "0" ]; then
-        logger "An error occurred while adding rule $PREFIX."
-      fi
+      BATCH="$BATCH""rule add to $PREFIX lookup $TABLE_ID pref $PREF\n"
     fi
   done
+  MSG=`echo -e $BATCH | ip -batch - 2>&1`
+  if [ "$?" != "0" ]; then
+    logger "An error occurred while adding rules: $MSG"
+  fi
 }
 
 rtdown() {
   RULE_LIST=`ip rule | grep 'lookup $TABLE_ID' | grep to | awk '{print $5}' | tr '\n' ' '`
+  BATCH=""
   for PREFIX in $RULE_LIST
   do
-    ip rule del to $PREFIX table $TABLE_ID
-    if [ "$?" != "0" ]; then
-      logger "An error occurred while deleting rule $PREFIX."
-    fi
+    BATCH="$BATCH""rule del to $PREFIX table $TABLE_ID\n"
   done
+  MSG=`echo -e $BATCH | ip -batch - 2>&1`
+  if [ "$?" != "0" ]; then
+    logger "An error occurred while deleting rules: $MSG"
+  fi
   ip route del table $TABLE_ID
   rm -f $VPNREADY
 }
