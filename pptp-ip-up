@@ -10,12 +10,7 @@ PREF="200"
 
 logger "VPN policy routing starting..."
 
-ip route add default via $LOCAL_ADDR proto kernel dev $IFACE table $TABLE_ID
-if [ "$?" != "0" ]; then
-  logger "An error occurred while adding route table."
-fi
-
-BATCH=""
+BATCH="route add default via $LOCAL_ADDR proto kernel dev $IFACE table $TABLE_ID\n"
 while read PREFIX
 do
   if [ "${PREFIX:0:1}" != "#" ]; then
@@ -24,8 +19,7 @@ do
 done < $RTFILE
 MSG=`echo -e $BATCH | ip -batch - 2>&1`
 if [ "$?" != "0" ]; then
-  logger "An error occurred while adding rules: $MSG"
+  logger "An error occurred while starting policy route: $MSG"
+else
+  logger "VPN policy routing is up..."
 fi
-
-logger "VPN policy routing is up..."
-
