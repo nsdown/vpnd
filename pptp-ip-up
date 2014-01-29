@@ -10,6 +10,7 @@ PREF="200"
 
 logger "VPN policy routing starting..."
 
+iptables -t nat -I POSTROUTING -o $IFACE -j MASQUERADE
 BATCH="route add default via $LOCAL_ADDR proto kernel dev $IFACE table $TABLE_ID\n"
 while read PREFIX
 do

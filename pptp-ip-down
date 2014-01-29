@@ -2,8 +2,11 @@
 
 set +e
 
+IFACE="$1"
+
 logger "VPN policy routing stoping..."
 
+iptables -t nat -D POSTROUTING -o $IFACE -j MASQUERADE
 RULE_LIST=`ip rule | grep 'lookup $TABLE_ID' | grep to | awk '{print $5}' | tr '\n' ' '`
 BATCH=""
 for PREFIX in $RULE_LIST
