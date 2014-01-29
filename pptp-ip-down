@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set +e
+
+IFACE="$1"
+
+logger "VPN policy routing stoping..."
+
+iptables -t nat -D POSTROUTING -o $IFACE -j MASQUERADE
+RULE_LIST=`ip rule | grep 'lookup $TABLE_ID' | grep to | awk '{print $5}' | tr '\n' ' '`
+BATCH=""
+for PREFIX in $RULE_LIST
+do
+  BATCH="$BATCH""rule del to $PREFIX table $TABLE_ID\n"
+done
+MSG=`echo -e $BATCH | ip -batch - 2>&1`
+if [ "$?" != "0" ]; then
+  logger "An error occurred while deleting rules: $MSG"
+fi
+ip route del table $TABLE_ID
+
+logger "VPN policy routing is down."
+

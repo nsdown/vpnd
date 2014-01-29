@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set +e
+
+IFACE="$1"
+LOCAL_ADDR="$4"
+RTFILE="/jffs/my.rtbl"
+TABLE_ID="100"
+PREF="200"
+
+logger "VPN policy routing starting..."
+
+iptables -t nat -I POSTROUTING -o $IFACE -j MASQUERADE
+BATCH="route add default via $LOCAL_ADDR proto kernel dev $IFACE table $TABLE_ID\n"
+while read PREFIX
+do
+  if [ "${PREFIX:0:1}" != "#" ]; then
+    BATCH="$BATCH""rule add to $PREFIX lookup $TABLE_ID pref $PREF\n"
+  fi
+done < $RTFILE
+MSG=`echo -e $BATCH | ip -batch - 2>&1`
+if [ "$?" != "0" ]; then
+  logger "An error occurred while starting policy route: $MSG"
+else
+  logger "VPN policy routing is up..."
+fi
