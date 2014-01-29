@@ -15,14 +15,13 @@ if [ "$?" != "0" ]; then
   logger "An error occurred while adding route table."
 fi
 
-RTBL=`cat $RTFILE | tr '\r\n' ' ' | tr '\n' ' ' | sed 's/ $//g'`
 BATCH=""
-for PREFIX in $RTBL
+while read PREFIX
 do
   if [ "${PREFIX:0:1}" != "#" ]; then
     BATCH="$BATCH""rule add to $PREFIX lookup $TABLE_ID pref $PREF\n"
   fi
-done
+done < $RTFILE
 MSG=`echo -e $BATCH | ip -batch - 2>&1`
 if [ "$?" != "0" ]; then
   logger "An error occurred while adding rules: $MSG"
