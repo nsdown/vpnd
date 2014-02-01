@@ -15,14 +15,9 @@ smart vpn routing table for tomato shibby mod.
 
 登录路由器管理页，点击 ```Administration -> Scripts -> WAN Up```，在输入框中写入一行
 ```
+/jffs/stop-pptp.sh || true
 /jffs/start-pptp.sh
 ```
-
-若要停止运行，请执行
-```
-/jffs/stop-pptp.sh
-```
-
 
 DNS 污染
 ----
