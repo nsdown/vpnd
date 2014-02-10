@@ -18,7 +18,6 @@ lcp-echo-interval 30
 idle 0
 ip-up-script /jffs/pptp-ip-up
 ip-down-script /jffs/pptp-ip-down
-connect "ip route flush cache"
 mtu 1400
 mru 1400
 +mppe
